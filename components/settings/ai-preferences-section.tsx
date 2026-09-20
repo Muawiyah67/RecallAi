@@ -28,6 +28,10 @@ export function AiPreferencesSection() {
         <CardDescription>Control how Recall AI answers your questions</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <p className="rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
+          Not connected to a backend yet — changes here won&apos;t be saved.
+        </p>
+
         <div className="flex flex-col gap-2">
           <Label>Response style</Label>
           <Select value={responseStyle} onValueChange={setResponseStyle}>

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, FileStack, ListChecks } from "lucide-react"
+import { ArrowLeft, FileStack, Info, ListChecks } from "lucide-react"
 
 import { MarkdownRenderer } from "@/components/chat/markdown-renderer"
 import { Button } from "@/components/ui/button"
@@ -32,6 +32,12 @@ export function StudyToolsPanel({
         <Button variant="ghost" size="sm" className="w-fit" onClick={onBack}>
           <ArrowLeft /> Back
         </Button>
+
+        <p className="flex items-start gap-1.5 rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
+          <Info className="mt-0.5 size-3 shrink-0" />
+          Placeholder content for now — not generated from your actual documents yet.
+        </p>
+
         <Card>
           <CardContent>
             {isGenerating ? (

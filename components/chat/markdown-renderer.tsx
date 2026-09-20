@@ -1,6 +1,7 @@
 "use client"
 
 import "katex/dist/katex.min.css"
+import "highlight.js/styles/github-dark.css"
 
 import * as React from "react"
 import ReactMarkdown from "react-markdown"
@@ -12,6 +13,21 @@ import { Check, Copy } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
+// rehype-highlight wraps tokens in nested <span> elements, so by the time
+// this component sees `children` it's an array of React elements, not the
+// raw string. String(children) on that just gives "[object Object]" — this
+// walks the tree and pulls out the actual text leaves instead.
+function getNodeText(node: React.ReactNode): string {
+  if (node === null || node === undefined || typeof node === "boolean") return ""
+  if (typeof node === "string" || typeof node === "number") return String(node)
+  if (Array.isArray(node)) return node.map(getNodeText).join("")
+  if (React.isValidElement(node)) {
+    const props = node.props as { children?: React.ReactNode }
+    return getNodeText(props.children)
+  }
+  return ""
+}
+
 function CodeBlock({
   className,
   children,
@@ -20,7 +36,7 @@ function CodeBlock({
   children: React.ReactNode
 }) {
   const [copied, setCopied] = React.useState(false)
-  const code = String(children).replace(/\n$/, "")
+  const code = getNodeText(children).replace(/\n$/, "")
 
   function handleCopy() {
     navigator.clipboard.writeText(code)
@@ -33,7 +49,7 @@ function CodeBlock({
       <Button
         variant="ghost"
         size="icon-xs"
-        className="absolute top-2 right-2 opacity-0 transition-opacity group-hover/code:opacity-100"
+        className="absolute top-2 right-2 opacity-0 transition-opacity group-hover/code:opacity-100 group-focus-within/code:opacity-100"
         onClick={handleCopy}
         aria-label="Copy code"
       >

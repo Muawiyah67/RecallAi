@@ -55,14 +55,17 @@ export function SubjectPageClient({
     if (doc) openDocument(doc, source.page)
   }
 
-  function handleUploadComplete(filename: string) {
+  function handleUploadComplete(filename: string, sizeKb: number) {
     const newDoc: Document = {
       id: `doc-${Date.now()}`,
       subjectId: subject.id,
       filename,
       uploadedAt: new Date().toISOString(),
+      // Page count can't be known without real parsing yet — still a
+      // placeholder until the document pipeline exists. sizeKb, unlike this,
+      // is real: it comes from the actual uploaded File's .size.
       pages: Math.floor(Math.random() * 15) + 5,
-      sizeKb: Math.floor(Math.random() * 3000) + 500,
+      sizeKb,
       status: "ready",
     }
     setDocuments((prev) => [newDoc, ...prev])

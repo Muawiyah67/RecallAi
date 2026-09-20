@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ListChecks } from "lucide-react"
+import { Info, ListChecks } from "lucide-react"
 
 import { OptionButtonGroup } from "@/components/option-button-group"
 import { Button } from "@/components/ui/button"
@@ -27,7 +27,7 @@ export function QuizSetup({
 }: {
   subjectName: string
   bankSize: number
-  onGenerate: (difficulty: QuizDifficulty | "mixed", count: number) => void
+  onGenerate: (difficulty: QuizDifficulty | "mixed", count: number, type: string) => void
 }) {
   const [difficulty, setDifficulty] = React.useState<QuizDifficulty | "mixed">("mixed")
   const [count, setCount] = React.useState(5)
@@ -54,6 +54,12 @@ export function QuizSetup({
         <CardDescription>Test your knowledge of {subjectName}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
+        <p className="flex items-start gap-1.5 rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
+          <Info className="mt-0.5 size-3 shrink-0" />
+          Pulled from a fixed practice bank for now — not generated from your uploaded documents
+          yet.
+        </p>
+
         <div className="flex flex-col gap-2">
           <Label>Difficulty</Label>
           <OptionButtonGroup options={DIFFICULTIES} value={difficulty} onChange={setDifficulty} />
@@ -69,7 +75,10 @@ export function QuizSetup({
           <OptionButtonGroup options={TYPES} value={type} onChange={setType} />
         </div>
 
-        <Button onClick={() => onGenerate(difficulty, Math.min(count, bankSize))} className="mt-2">
+        <Button
+          onClick={() => onGenerate(difficulty, Math.min(count, bankSize), type)}
+          className="mt-2"
+        >
           <ListChecks /> Generate quiz
         </Button>
       </CardContent>

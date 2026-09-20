@@ -1,3 +1,5 @@
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -20,7 +22,11 @@ export function StorageSection() {
           <Progress value={percentUsed} />
           <div className="flex items-center justify-between">
             <Muted className="text-xs">{percentUsed}% used</Muted>
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast.warning("Billing isn't wired up yet.")}
+            >
               Upgrade plan
             </Button>
           </div>

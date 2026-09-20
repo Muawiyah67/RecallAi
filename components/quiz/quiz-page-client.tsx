@@ -19,8 +19,8 @@ export function QuizPageClient({ subject }: { subject: Subject }) {
 
   const bankSize = getQuizBankSize(subject.id)
 
-  function handleGenerate(difficulty: QuizDifficulty | "mixed", count: number) {
-    setQuestions(buildQuiz(subject.id, difficulty, count))
+  function handleGenerate(difficulty: QuizDifficulty | "mixed", count: number, type: string) {
+    setQuestions(buildQuiz(subject.id, difficulty, count, type))
     setStage("running")
   }
 

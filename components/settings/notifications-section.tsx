@@ -27,6 +27,10 @@ export function NotificationsSection() {
         <CardDescription>Choose what you want to be notified about</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <p className="rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
+          Not connected to a backend yet — changes here won&apos;t be saved.
+        </p>
+
         {OPTIONS.map((option, i) => (
           <React.Fragment key={option.key}>
             <div className="flex items-center justify-between gap-4">

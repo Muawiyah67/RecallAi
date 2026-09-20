@@ -36,8 +36,9 @@ export function ProfileSection() {
     defaultValues: { name: currentUser.name, email: currentUser.email },
   })
 
-  function onSubmit(values: ProfileValues) {
-    toast.success(`Saved profile for ${values.name}`)
+  // TODO: replace with a real PATCH /users/me call once the NestJS API exists.
+  function onSubmit(_values: ProfileValues) {
+    toast.warning("Not connected to a backend yet — this wasn't actually saved.")
   }
 
   return (
@@ -52,7 +53,12 @@ export function ProfileSection() {
             <Avatar size="lg">
               <AvatarFallback>{getInitials(currentUser.name)}</AvatarFallback>
             </Avatar>
-            <Button type="button" variant="outline" size="sm">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => toast.warning("Photo upload isn't wired up yet.")}
+            >
               Change photo
             </Button>
           </div>

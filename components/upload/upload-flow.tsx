@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { Check, CheckCircle2, FileText, Upload } from "lucide-react"
+import { Check, CheckCircle2, FileText, Info, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -29,7 +29,7 @@ interface UploadFlowProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   subjectName: string
-  onComplete?: (filename: string) => void
+  onComplete?: (filename: string, sizeKb: number) => void
 }
 
 export function UploadFlow({ open, onOpenChange, subjectName, onComplete }: UploadFlowProps) {
@@ -40,6 +40,13 @@ export function UploadFlow({ open, onOpenChange, subjectName, onComplete }: Uplo
           <DialogTitle>Upload a document</DialogTitle>
           <DialogDescription>Add study material to {subjectName}</DialogDescription>
         </DialogHeader>
+
+        <p className="flex items-start gap-1.5 rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
+          <Info className="mt-0.5 size-3 shrink-0" />
+          Simulated for now — files aren&apos;t actually processed; text extraction and embeddings
+          aren&apos;t wired up yet.
+        </p>
+
         <UploadFlowBody onOpenChange={onOpenChange} onComplete={onComplete} />
       </DialogContent>
     </Dialog>
@@ -51,16 +58,16 @@ function UploadFlowBody({
   onComplete,
 }: {
   onOpenChange: (open: boolean) => void
-  onComplete?: (filename: string) => void
+  onComplete?: (filename: string, sizeKb: number) => void
 }) {
   const [step, setStep] = React.useState<Step>("choose")
-  const [fileName, setFileName] = React.useState<string | null>(null)
+  const [file, setFile] = React.useState<File | null>(null)
   const [phaseProgress, setPhaseProgress] = React.useState(0)
   const [isDragging, setIsDragging] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
-  function beginUpload(name: string) {
-    setFileName(name)
+  function beginUpload(selectedFile: File) {
+    setFile(selectedFile)
     setStep("uploading")
     setPhaseProgress(0)
   }
@@ -92,16 +99,16 @@ function UploadFlowBody({
         setPhaseProgress(0)
       } else {
         setStep("ready")
-        if (fileName) onComplete?.(fileName)
+        if (file) onComplete?.(file.name, Math.round(file.size / 1024))
       }
     }, 350)
 
     return () => clearTimeout(timeout)
-  }, [phaseProgress, step, fileName, onComplete])
+  }, [phaseProgress, step, file, onComplete])
 
   function handleFiles(files: FileList | null) {
-    const file = files?.[0]
-    if (file) beginUpload(file.name)
+    const selected = files?.[0]
+    if (selected) beginUpload(selected)
   }
 
   return (
@@ -171,7 +178,7 @@ function UploadFlowBody({
           >
             <div className="flex items-center gap-2.5 text-sm font-medium">
               <FileText className="size-4 text-muted-foreground" />
-              <span className="truncate">{fileName}</span>
+              <span className="truncate">{file?.name}</span>
             </div>
             <div className="flex flex-col gap-4">
               {PHASES.map((phase) => {
@@ -227,8 +234,11 @@ function UploadFlowBody({
               <CheckCircle2 className="size-7" />
             </motion.div>
             <div className="flex flex-col gap-1">
-              <span className="text-sm font-semibold">{fileName} is ready</span>
-              <Muted className="text-xs">Text extracted and embeddings created successfully.</Muted>
+              <span className="text-sm font-semibold">{file?.name} is ready</span>
+              <Muted className="text-xs">
+                Saved for preview — text extraction and embeddings aren&apos;t connected to a
+                backend yet.
+              </Muted>
             </div>
             <div className="mt-2 flex gap-2">
               <Button variant="outline" size="sm" onClick={() => setStep("choose")}>

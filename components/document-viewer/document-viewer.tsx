@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { FileText } from "lucide-react"
+import { FileText, Info } from "lucide-react"
 
 import { PageThumbnails } from "@/components/document-viewer/page-thumbnails"
 import { PdfPage } from "@/components/document-viewer/pdf-page"
@@ -62,7 +62,7 @@ function ViewerBody({ doc, initialPage }: { doc: Document; initialPage: number }
   }
 
   const isCitedPage = page === initialPage
-  const explanation = `This passage was surfaced because it directly discusses the concept referenced in the AI's answer. The highlighted paragraph on page ${initialPage} has the strongest semantic match to your question — it's why the model cited it as a source.`
+  const explanation = `Once real retrieval is wired up, this panel will explain why a passage was cited — for example, "the highlighted paragraph on page ${initialPage} has the strongest semantic match to your question." The text and highlight you see now are placeholders standing in for that explanation.`
 
   return (
     <>
@@ -76,6 +76,11 @@ function ViewerBody({ doc, initialPage }: { doc: Document; initialPage: number }
           </DialogDescription>
         </div>
       </DialogHeader>
+
+      <div className="flex items-center justify-center gap-1.5 border-b border-border bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
+        <Info className="size-3 shrink-0" />
+        Preview only — showing placeholder content, not your actual document
+      </div>
 
       <ViewerToolbar
         page={page}
@@ -131,10 +136,10 @@ function ExplanationPanel({
       {isCitedPage ? (
         <Muted>{explanation}</Muted>
       ) : (
-        <Muted>Navigate to the cited page to see why this section was referenced.</Muted>
+        <Muted>Navigate to the cited page to see this placeholder explanation.</Muted>
       )}
       <div className="flex flex-col gap-1.5 rounded-lg border border-border bg-muted/30 p-3">
-        <Small className="text-muted-foreground">Excerpt</Small>
+        <Small className="text-muted-foreground">Excerpt (placeholder)</Small>
         <p className="text-xs leading-relaxed text-foreground">{getPageParagraphs(citedPage)[0]}</p>
       </div>
     </div>

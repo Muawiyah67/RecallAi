@@ -8,7 +8,7 @@ import { TypingIndicator } from "@/components/chat/typing-indicator"
 import { useChatSimulation } from "@/components/chat/use-chat-simulation"
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import type { ChatMessage as ChatMessageType, Source } from "@/lib/types"
-import { Sparkles } from "lucide-react"
+import { Info, Sparkles } from "lucide-react"
 
 export function ChatThread({
   subjectId,
@@ -70,6 +70,12 @@ export function ChatThread({
           <div ref={bottomRef} />
         </div>
       </div>
+
+      <div className="flex items-center justify-center gap-1.5 border-t border-border bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
+        <Info className="size-3 shrink-0" />
+        Simulated responses — not connected to a real AI backend yet
+      </div>
+
       <ChatInput onSend={sendMessage} disabled={isBusy} />
     </div>
   )
